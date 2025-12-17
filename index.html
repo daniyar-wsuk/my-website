@@ -1,0 +1,1712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Literary Haven - Modern Bookstore</title>
+    
+    <style>
+        /* ============================================
+           CSS VARIABLES & RESET
+           ============================================ */
+        :root {
+            /* Color Palette - Warm Literary Aesthetic */
+            --primary-color: #8B6F47;
+            --secondary-color: #D4A574;
+            --accent-color: #C17A5C;
+            --dark-text: #2C2416;
+            --light-text: #F5F1E8;
+            --background-cream: #FAF7F0;
+            --background-dark: #3D3024;
+            --card-bg: #FFFFFF;
+            --shadow-light: rgba(139, 111, 71, 0.1);
+            --shadow-medium: rgba(139, 111, 71, 0.2);
+            --shadow-heavy: rgba(139, 111, 71, 0.3);
+            
+            /* Typography */
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Crimson Text', serif;
+            --font-accent: 'Montserrat', sans-serif;
+            
+            /* Spacing */
+            --section-padding: 4rem 2rem;
+            --card-gap: 2rem;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-body);
+            color: var(--dark-text);
+            background-color: var(--background-cream);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Google Fonts Import */
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap');
+        
+        /* ============================================
+           ANIMATIONS & KEYFRAMES
+           ============================================ */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes slideInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes scaleIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+        
+        /* ============================================
+           HEADER & NAVIGATION
+           ============================================ */
+        header {
+            background: linear-gradient(135deg, var(--background-dark) 0%, var(--primary-color) 100%);
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 20px var(--shadow-medium);
+            animation: slideInLeft 0.6s ease-out;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .logo {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--light-text);
+            text-decoration: none;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo:hover {
+            transform: scale(1.05);
+        }
+        
+        .logo::before {
+            content: "📚";
+            font-size: 1.8rem;
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+        }
+        
+        .nav-links a {
+            color: var(--light-text);
+            text-decoration: none;
+            font-family: var(--font-accent);
+            font-weight: 500;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--secondary-color);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover {
+            color: var(--secondary-color);
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: var(--light-text);
+            transition: transform 0.3s ease;
+        }
+        
+        .cart-icon:hover {
+            transform: scale(1.2) rotate(10deg);
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--accent-color);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-family: var(--font-accent);
+            font-weight: 600;
+            animation: scaleIn 0.3s ease;
+        }
+        
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+        
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background-color: var(--light-text);
+            transition: all 0.3s ease;
+        }
+        
+        /* ============================================
+           HERO SECTION
+           ============================================ */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            padding: 8rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 1s ease-out;
+        }
+        
+        .hero h1 {
+            font-family: var(--font-display);
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--light-text);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        
+        .hero p {
+            font-size: 1.4rem;
+            color: var(--light-text);
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+            font-style: italic;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 3rem;
+            background-color: var(--accent-color);
+            color: white;
+            text-decoration: none;
+            font-family: var(--font-accent);
+            font-weight: 600;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+        
+        .cta-button:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .cta-button span {
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* ============================================
+           BOOKS SECTION
+           ============================================ */
+        .books-section {
+            padding: var(--section-padding);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+        
+        .section-header h2 {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-header h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color), var(--accent-color));
+            border-radius: 2px;
+        }
+        
+        .section-header p {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            font-style: italic;
+        }
+        
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--card-gap);
+            margin-top: 2rem;
+        }
+        
+        /* ============================================
+           BOOK CARDS
+           ============================================ */
+        .book-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px var(--shadow-light);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            transform: translateY(30px);
+            position: relative;
+        }
+        
+        .book-card.animate-in {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        
+        .book-card:hover {
+            transform: translateY(-15px) scale(1.03);
+            box-shadow: 0 20px 50px var(--shadow-heavy);
+        }
+        
+        .book-image-container {
+            position: relative;
+            overflow: hidden;
+            height: 400px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+        
+        .book-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+        
+        .book-card:hover .book-image-container img {
+            transform: scale(1.1);
+        }
+        
+        .book-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: var(--accent-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-family: var(--font-accent);
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+        
+        .book-content {
+            padding: 2rem;
+        }
+        
+        .book-title {
+            font-family: var(--font-display);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 0.8rem;
+            line-height: 1.3;
+        }
+        
+        .book-description {
+            font-size: 1rem;
+            color: #666;
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+        
+        .book-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid var(--background-cream);
+        }
+        
+        .book-price {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent-color);
+        }
+        
+        .add-to-cart-btn {
+            padding: 0.8rem 1.8rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-family: var(--font-accent);
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(139, 111, 71, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .add-to-cart-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+        
+        .add-to-cart-btn:hover::before {
+            left: 100%;
+        }
+        
+        .add-to-cart-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(139, 111, 71, 0.4);
+        }
+        
+        .add-to-cart-btn:active {
+            transform: translateY(0);
+        }
+        
+        .add-to-cart-btn.added {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            animation: pulse 0.5s ease;
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+        
+        /* ============================================
+           CATEGORIES SECTION
+           ============================================ */
+        .categories-section {
+            padding: var(--section-padding);
+            background: linear-gradient(135deg, var(--background-cream) 0%, #F0EBE3 100%);
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .category-card {
+            background: white;
+            padding: 2.5rem 2rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 20px var(--shadow-light);
+            transition: all 0.4s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(139, 111, 71, 0.05), transparent);
+            transition: left 0.6s ease;
+        }
+        
+        .category-card:hover::before {
+            left: 100%;
+        }
+        
+        .category-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px var(--shadow-medium);
+        }
+        
+        .category-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .category-card:hover .category-icon {
+            transform: scale(1.2) rotate(5deg);
+        }
+        
+        .category-card h3 {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            color: var(--dark-text);
+            margin-bottom: 0.8rem;
+        }
+        
+        .category-card p {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .category-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-family: var(--font-accent);
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .category-link:hover {
+            transform: translateX(5px);
+            color: var(--primary-color);
+        }
+        
+        /* ============================================
+           ABOUT SECTION
+           ============================================ */
+        .about-section {
+            padding: var(--section-padding);
+            background: white;
+        }
+        
+        .about-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+        
+        .about-content h2 {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            color: var(--dark-text);
+            margin-bottom: 1rem;
+        }
+        
+        .about-subtitle {
+            font-size: 1.3rem;
+            color: var(--accent-color);
+            font-style: italic;
+            margin-bottom: 2rem;
+        }
+        
+        .about-text p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 1.5rem;
+        }
+        
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+            padding-top: 3rem;
+            border-top: 2px solid var(--background-cream);
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-family: var(--font-display);
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-family: var(--font-accent);
+            font-size: 0.9rem;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .about-image {
+            position: relative;
+            height: 500px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px var(--shadow-heavy);
+        }
+        
+        .about-decoration {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .about-decoration::before,
+        .about-decoration::after {
+            content: '📚';
+            position: absolute;
+            font-size: 4rem;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .about-decoration::after {
+            content: '✨';
+            font-size: 2rem;
+            top: 20%;
+            left: 70%;
+            animation: float 3s ease-in-out 1s infinite;
+        }
+        
+        /* ============================================
+           CONTACT SECTION
+           ============================================ */
+        .contact-section {
+            padding: var(--section-padding);
+            background: linear-gradient(135deg, var(--background-cream) 0%, #F0EBE3 100%);
+        }
+        
+        .contact-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 3rem;
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        
+        .contact-item {
+            display: flex;
+            gap: 1.5rem;
+            padding: 2rem;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px var(--shadow-light);
+            transition: all 0.3s ease;
+        }
+        
+        .contact-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px var(--shadow-medium);
+        }
+        
+        .contact-icon {
+            font-size: 2.5rem;
+            flex-shrink: 0;
+        }
+        
+        .contact-details h3 {
+            font-family: var(--font-display);
+            font-size: 1.4rem;
+            color: var(--dark-text);
+            margin-bottom: 0.5rem;
+        }
+        
+        .contact-details p {
+            color: #666;
+            line-height: 1.8;
+        }
+        
+        .contact-form {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px var(--shadow-light);
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--background-cream);
+            border-radius: 10px;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            color: var(--dark-text);
+            transition: all 0.3s ease;
+            background: var(--background-cream);
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            background: white;
+            box-shadow: 0 0 0 3px rgba(139, 111, 71, 0.1);
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-family: var(--font-accent);
+            font-weight: 600;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(139, 111, 71, 0.3);
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(139, 111, 71, 0.4);
+        }
+        
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+        
+        /* ============================================
+           FOOTER
+           ============================================ */
+        footer {
+            background: linear-gradient(135deg, var(--background-dark) 0%, var(--primary-color) 100%);
+            color: var(--light-text);
+            padding: 3rem 2rem 2rem;
+            margin-top: 5rem;
+            text-align: center;
+        }
+        
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: var(--light-text);
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .social-icon:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-5px) rotate(360deg);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .footer-text {
+            font-family: var(--font-accent);
+            font-size: 0.95rem;
+            opacity: 0.9;
+            margin-top: 1rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .footer-text a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .footer-text a:hover {
+            color: var(--accent-color);
+            text-decoration: underline;
+        }
+        
+        /* ============================================
+           SCROLL TO TOP BUTTON
+           ============================================ */
+        .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            z-index: 999;
+        }
+        
+        .scroll-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .scroll-to-top:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        }
+        
+        /* ============================================
+           NOTIFICATION TOAST
+           ============================================ */
+        .toast {
+            position: fixed;
+            top: 100px;
+            right: -400px;
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            z-index: 1001;
+            transition: right 0.4s ease;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            min-width: 300px;
+        }
+        
+        .toast.show {
+            right: 30px;
+        }
+        
+        .toast-icon {
+            font-size: 2rem;
+        }
+        
+        .toast-content {
+            flex: 1;
+        }
+        
+        .toast-title {
+            font-family: var(--font-display);
+            font-weight: 700;
+            color: var(--dark-text);
+            margin-bottom: 0.3rem;
+        }
+        
+        .toast-message {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        /* ============================================
+           RESPONSIVE DESIGN
+           ============================================ */
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: -100%;
+                flex-direction: column;
+                background-color: var(--background-dark);
+                width: 100%;
+                padding: 2rem;
+                gap: 1.5rem;
+                transition: left 0.3s ease;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            }
+            
+            .nav-links.active {
+                left: 0;
+            }
+            
+            .menu-toggle {
+                display: flex;
+            }
+            
+            .menu-toggle.active span:nth-child(1) {
+                transform: rotate(45deg) translate(5px, 5px);
+            }
+            
+            .menu-toggle.active span:nth-child(2) {
+                opacity: 0;
+            }
+            
+            .menu-toggle.active span:nth-child(3) {
+                transform: rotate(-45deg) translate(7px, -6px);
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .section-header h2 {
+                font-size: 2rem;
+            }
+            
+            .books-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-button {
+                padding: 0.8rem 2rem;
+                font-size: 1rem;
+            }
+            
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .about-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .about-content h2 {
+                font-size: 2rem;
+            }
+            
+            .about-image {
+                height: 300px;
+            }
+            
+            .about-stats {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .contact-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .contact-form {
+                padding: 2rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+            }
+            
+            .book-title {
+                font-size: 1.3rem;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+            }
+            
+            .contact-item {
+                padding: 1.5rem;
+            }
+            
+            .toast {
+                min-width: 250px;
+                padding: 1rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ============================================
+         HEADER & NAVIGATION
+         ============================================ -->
+    <header>
+        <nav>
+            <a href="#" class="logo">Literary Haven</a>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#books">Books</a></li>
+                <li><a href="#categories">Categories</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            
+            <div class="cart-icon" id="cartIcon">
+                🛒
+                <span class="cart-count" id="cartCount">0</span>
+            </div>
+            
+            <div class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ============================================
+         HERO SECTION
+         ============================================ -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>Discover Your Next Great Read</h1>
+            <p>Explore curated collections of timeless classics and contemporary masterpieces</p>
+            <a href="#books" class="cta-button"><span>Browse Collection</span></a>
+        </div>
+    </section>
+
+    <!-- ============================================
+         BOOKS SECTION
+         ============================================ -->
+    <section class="books-section" id="books">
+        <div class="section-header">
+            <h2>Featured Books</h2>
+            <p>Handpicked selections from our literary treasure trove</p>
+        </div>
+
+        <div class="books-grid">
+            <!-- Book Card 1 -->
+            <div class="book-card">
+                <div class="book-image-container">
+                    <img src="book1.jpg" alt="The Midnight Garden">
+                    <span class="book-badge">Bestseller</span>
+                </div>
+                <div class="book-content">
+                    <h3 class="book-title">The Midnight Garden</h3>
+                    <p class="book-description">A mesmerizing tale of mystery and magic that unfolds in a forgotten Victorian garden. Perfect for lovers of atmospheric fiction.</p>
+                    <div class="book-footer">
+                        <span class="book-price">$24.99</span>
+                        <button class="add-to-cart-btn" data-book="The Midnight Garden" data-price="24.99">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Book Card 2 -->
+            <div class="book-card">
+                <div class="book-image-container">
+                    <img src="book2.jpg" alt="Echoes of Tomorrow">
+                    <span class="book-badge">New Release</span>
+                </div>
+                <div class="book-content">
+                    <h3 class="book-title">Echoes of Tomorrow</h3>
+                    <p class="book-description">A thought-provoking science fiction journey through time and space, exploring what it means to be human in an ever-changing world.</p>
+                    <div class="book-footer">
+                        <span class="book-price">$29.99</span>
+                        <button class="add-to-cart-btn" data-book="Echoes of Tomorrow" data-price="29.99">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Book Card 3 -->
+            <div class="book-card">
+                <div class="book-image-container">
+                    <img src="book3.jpg" alt="The Silent Observer">
+                    <span class="book-badge">Award Winner</span>
+                </div>
+                <div class="book-content">
+                    <h3 class="book-title">The Silent Observer</h3>
+                    <p class="book-description">An intricate psychological thriller that keeps you guessing until the very last page. A masterclass in suspense and character development.</p>
+                    <div class="book-footer">
+                        <span class="book-price">$22.99</span>
+                        <button class="add-to-cart-btn" data-book="The Silent Observer" data-price="22.99">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Book Card 4 -->
+            <div class="book-card">
+                <div class="book-image-container">
+                    <img src="book4.jpg" alt="Whispers in the Wind">
+                </div>
+                <div class="book-content">
+                    <h3 class="book-title">Whispers in the Wind</h3>
+                    <p class="book-description">A beautiful romantic saga set against the backdrop of the Scottish Highlands. Love, loss, and redemption intertwine in this unforgettable story.</p>
+                    <div class="book-footer">
+                        <span class="book-price">$19.99</span>
+                        <button class="add-to-cart-btn" data-book="Whispers in the Wind" data-price="19.99">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Book Card 5 -->
+            <div class="book-card">
+                <div class="book-image-container">
+                    <img src="book5.jpg" alt="Chronicles of the Forgotten">
+                    <span class="book-badge">Editor's Choice</span>
+                </div>
+                <div class="book-content">
+                    <h3 class="book-title">Chronicles of the Forgotten</h3>
+                    <p class="book-description">An epic fantasy adventure spanning generations. Magic, betrayal, and heroism collide in this richly imagined world.</p>
+                    <div class="book-footer">
+                        <span class="book-price">$32.99</span>
+                        <button class="add-to-cart-btn" data-book="Chronicles of the Forgotten" data-price="32.99">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Book Card 6 -->
+            <div class="book-card">
+                <div class="book-image-container">
+                    <img src="book6.jpg" alt="The Art of Living">
+                </div>
+                <div class="book-content">
+                    <h3 class="book-title">The Art of Living</h3>
+                    <p class="book-description">A transformative guide to mindfulness and intentional living. Discover practical wisdom for creating a life of purpose and joy.</p>
+                    <div class="book-footer">
+                        <span class="book-price">$18.99</span>
+                        <button class="add-to-cart-btn" data-book="The Art of Living" data-price="18.99">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Book Card 7 -->
+            <div class="book-card">
+                <div class="book-image-container">
+                    <img src="book7.jpg" alt="Beyond the Horizon">
+                    <span class="book-badge">Must Read</span>
+                </div>
+                <div class="book-content">
+                    <h3 class="book-title">Beyond the Horizon</h3>
+                    <p class="book-description">An inspiring memoir of adventure and self-discovery. Follow one traveler's journey across continents and into the depths of the human spirit.</p>
+                    <div class="book-footer">
+                        <span class="book-price">$26.99</span>
+                        <button class="add-to-cart-btn" data-book="Beyond the Horizon" data-price="26.99">Add to Cart</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         CATEGORIES SECTION
+         ============================================ -->
+    <section class="categories-section" id="categories">
+        <div class="section-header">
+            <h2>Browse by Category</h2>
+            <p>Find your perfect book in our curated collections</p>
+        </div>
+
+        <div class="categories-grid">
+            <div class="category-card">
+                <div class="category-icon">📖</div>
+                <h3>Fiction</h3>
+                <p>Immerse yourself in captivating stories and unforgettable characters</p>
+                <a href="#books" class="category-link">Explore →</a>
+            </div>
+
+            <div class="category-card">
+                <div class="category-icon">🔬</div>
+                <h3>Science Fiction</h3>
+                <p>Journey to distant worlds and explore future possibilities</p>
+                <a href="#books" class="category-link">Explore →</a>
+            </div>
+
+            <div class="category-card">
+                <div class="category-icon">🕵️</div>
+                <h3>Mystery & Thriller</h3>
+                <p>Unravel mysteries and experience edge-of-your-seat suspense</p>
+                <a href="#books" class="category-link">Explore →</a>
+            </div>
+
+            <div class="category-card">
+                <div class="category-icon">💕</div>
+                <h3>Romance</h3>
+                <p>Fall in love with heartwarming tales of passion and connection</p>
+                <a href="#books" class="category-link">Explore →</a>
+            </div>
+
+            <div class="category-card">
+                <div class="category-icon">🐉</div>
+                <h3>Fantasy</h3>
+                <p>Escape to magical realms filled with wonder and adventure</p>
+                <a href="#books" class="category-link">Explore →</a>
+            </div>
+
+            <div class="category-card">
+                <div class="category-icon">🧠</div>
+                <h3>Self-Help</h3>
+                <p>Transform your life with insights and practical guidance</p>
+                <a href="#books" class="category-link">Explore →</a>
+            </div>
+
+            <div class="category-card">
+                <div class="category-icon">📚</div>
+                <h3>Biography</h3>
+                <p>Discover inspiring lives and remarkable journeys</p>
+                <a href="#books" class="category-link">Explore →</a>
+            </div>
+
+            <div class="category-card">
+                <div class="category-icon">🎨</div>
+                <h3>Art & Design</h3>
+                <p>Explore creativity through visual masterpieces and techniques</p>
+                <a href="#books" class="category-link">Explore →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         ABOUT SECTION
+         ============================================ -->
+    <section class="about-section" id="about">
+        <div class="about-container">
+            <div class="about-content">
+                <h2>About Literary Haven</h2>
+                <p class="about-subtitle">Your Gateway to Literary Excellence Since 2010</p>
+                
+                <div class="about-text">
+                    <p>Welcome to Literary Haven, where every book tells a story and every reader finds their home. For over a decade, we've been dedicated to curating exceptional collections that inspire, enlighten, and entertain.</p>
+                    
+                    <p>Our passion for literature drives us to handpick each title in our collection, ensuring that every book meets our high standards of quality and storytelling excellence. Whether you're seeking a thrilling adventure, profound wisdom, or a touching romance, we're here to guide you to your next unforgettable read.</p>
+                    
+                    <p>We believe that books have the power to transform lives, open minds, and connect souls. That's why we're committed to making great literature accessible to everyone, fostering a community of readers who share our love for the written word.</p>
+                </div>
+
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <div class="stat-number">50K+</div>
+                        <div class="stat-label">Books in Collection</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">100K+</div>
+                        <div class="stat-label">Happy Readers</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">14</div>
+                        <div class="stat-label">Years of Excellence</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="about-image">
+                <div class="about-decoration"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================
+         CONTACT SECTION
+         ============================================ -->
+    <section class="contact-section" id="contact">
+        <div class="section-header">
+            <h2>Get In Touch</h2>
+            <p>We'd love to hear from you</p>
+        </div>
+
+        <div class="contact-container">
+            <div class="contact-info">
+                <div class="contact-item">
+                    <div class="contact-icon">📍</div>
+                    <div class="contact-details">
+                        <h3>Visit Us</h3>
+                        <p>123 Book Street<br>Literary District<br>Reading City, RC 12345</p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">📧</div>
+                    <div class="contact-details">
+                        <h3>Email Us</h3>
+                        <p>info@literaryhaven.com<br>support@literaryhaven.com</p>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-icon">📞</div>
+                    <div class="contact-details">
+                        <h3>Call Us</h3>
+                        <p>+1 (555) 123-4567<br>Mon-Fri: 9AM - 6PM</p>
+                    </div>
+                </div>
+            </div>
+
+            <form class="contact-form" id="contactForm">
+                <div class="form-group">
+                    <input type="text" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" placeholder="Your Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="text" placeholder="Subject">
+                </div>
+                <div class="form-group">
+                    <textarea placeholder="Your Message" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="submit-btn">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- ============================================
+         FOOTER
+         ============================================ -->
+    <footer>
+        <div class="footer-content">
+            <div class="social-icons">
+                <a href="#" class="social-icon" aria-label="Facebook">📘</a>
+                <a href="#" class="social-icon" aria-label="Twitter">🐦</a>
+                <a href="#" class="social-icon" aria-label="Instagram">📷</a>
+                <a href="#" class="social-icon" aria-label="Pinterest">📌</a>
+            </div>
+            <p class="footer-text">
+                &copy; 2024 Literary Haven. All rights reserved. | 
+                <a href="#">Privacy Policy</a> | 
+                <a href="#">Terms of Service</a>
+            </p>
+            <p class="footer-text" style="margin-top: 0.5rem; font-size: 0.85rem; opacity: 0.8;">
+                Crafted with ❤️ for book lovers everywhere
+            </p>
+        </div>
+    </footer>
+
+    <!-- ============================================
+         SCROLL TO TOP BUTTON
+         ============================================ -->
+    <button class="scroll-to-top" id="scrollToTop" aria-label="Scroll to top">↑</button>
+
+    <!-- ============================================
+         NOTIFICATION TOAST
+         ============================================ -->
+    <div class="toast" id="toast">
+        <span class="toast-icon">✓</span>
+        <div class="toast-content">
+            <div class="toast-title">Added to Cart!</div>
+            <div class="toast-message" id="toastMessage"></div>
+        </div>
+    </div>
+
+    <!-- ============================================
+         JAVASCRIPT
+         ============================================ -->
+    <script>
+        // ============================================
+        // CART FUNCTIONALITY
+        // ============================================
+        let cartCount = 0;
+        const cartCountElement = document.getElementById('cartCount');
+        const addToCartButtons = document.querySelectorAll('.add-to-cart-btn');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+
+        // Add to cart event listeners
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const bookName = this.getAttribute('data-book');
+                const bookPrice = this.getAttribute('data-price');
+                
+                // Increment cart count
+                cartCount++;
+                cartCountElement.textContent = cartCount;
+                
+                // Add animation to cart icon
+                const cartIcon = document.getElementById('cartIcon');
+                cartIcon.style.animation = 'none';
+                setTimeout(() => {
+                    cartIcon.style.animation = 'pulse 0.5s ease';
+                }, 10);
+                
+                // Change button state temporarily
+                this.classList.add('added');
+                const originalText = this.textContent;
+                this.textContent = '✓ Added';
+                
+                setTimeout(() => {
+                    this.classList.remove('added');
+                    this.textContent = originalText;
+                }, 2000);
+                
+                // Show toast notification
+                toastMessage.textContent = `${bookName} ($${bookPrice})`;
+                toast.classList.add('show');
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            });
+        });
+
+        // ============================================
+        // MOBILE MENU TOGGLE
+        // ============================================
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // ============================================
+        // SCROLL ANIMATIONS
+        // ============================================
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-in');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all book cards
+        document.querySelectorAll('.book-card').forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+            observer.observe(card);
+        });
+
+        // ============================================
+        // SCROLL TO TOP BUTTON
+        // ============================================
+        const scrollToTopBtn = document.getElementById('scrollToTop');
+
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                scrollToTopBtn.classList.add('visible');
+            } else {
+                scrollToTopBtn.classList.remove('visible');
+            }
+        });
+
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+        // ============================================
+        // SMOOTH SCROLLING FOR NAVIGATION LINKS
+        // ============================================
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // ============================================
+        // PARALLAX EFFECT ON HERO
+        // ============================================
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const hero = document.querySelector('.hero');
+            if (hero) {
+                hero.style.transform = `translateY(${scrolled * 0.5}px)`;
+                hero.style.opacity = 1 - scrolled / 700;
+            }
+        });
+
+        // ============================================
+        // ADD RANDOM FLOAT ANIMATION TO BADGES
+        // ============================================
+        document.querySelectorAll('.book-badge').forEach(badge => {
+            const randomDelay = Math.random() * 2;
+            badge.style.animation = `float 3s ease-in-out ${randomDelay}s infinite`;
+        });
+
+        // ============================================
+        // CONSOLE WELCOME MESSAGE
+        // ============================================
+        console.log('%c📚 Welcome to Literary Haven! 📚', 'font-size: 20px; color: #8B6F47; font-weight: bold;');
+        console.log('%cExplore our collection and find your next great read!', 'font-size: 14px; color: #D4A574;');
+
+        // ============================================
+        // CONTACT FORM SUBMISSION
+        // ============================================
+        const contactForm = document.getElementById('contactForm');
+        
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const formData = new FormData(contactForm);
+            
+            // Show success toast
+            toastMessage.textContent = 'Message sent successfully! We\'ll get back to you soon.';
+            toast.classList.add('show');
+            
+            // Reset form
+            contactForm.reset();
+            
+            // Hide toast after 4 seconds
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4000);
+        });
+
+        // ============================================
+        // ANIMATE ELEMENTS ON SCROLL
+        // ============================================
+        const animateOnScrollElements = document.querySelectorAll('.category-card, .contact-item, .stat-item');
+        
+        const scrollObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry, index) => {
+                if (entry.isIntersecting) {
+                    setTimeout(() => {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }, index * 100);
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        });
+
+        animateOnScrollElements.forEach(element => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(30px)';
+            element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            scrollObserver.observe(element);
+        });
+
+        // ============================================
+        // COUNTER ANIMATION FOR STATS
+        // ============================================
+        const statNumbers = document.querySelectorAll('.stat-number');
+        
+        const animateCounter = (element, target) => {
+            const duration = 2000;
+            const step = target / (duration / 16);
+            let current = 0;
+            
+            const updateCounter = () => {
+                current += step;
+                if (current < target) {
+                    element.textContent = Math.floor(current).toLocaleString() + '+';
+                    requestAnimationFrame(updateCounter);
+                } else {
+                    // Extract just the number part from the original text
+                    const originalText = element.textContent;
+                    element.textContent = originalText;
+                }
+            };
+            
+            updateCounter();
+        };
+
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const text = entry.target.textContent;
+                    const number = parseInt(text.replace(/\D/g, ''));
+                    animateCounter(entry.target, number);
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        statNumbers.forEach(stat => {
+            statsObserver.observe(stat);
+        });
+    </script>
+</body>
+</html>
